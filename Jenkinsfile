@@ -1,6 +1,6 @@
 
 pipeline {
-    agent any
+    label 'nodejs-build'
 
     tools {
         nodejs 'NodeJS-24'
