@@ -1,6 +1,8 @@
 
 pipeline {
-    label 'nodejs-build'
+    agent {
+        label 'nodejs-build'
+    }
 
     tools {
         nodejs 'NodeJS-24'
@@ -53,7 +55,6 @@ pipeline {
         success {
             echo 'CI pipeline completed successfully!'
         }
-
         failure {
             echo 'CI pipeline failed. Check the console output.'
         }
