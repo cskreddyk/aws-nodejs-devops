@@ -10,6 +10,7 @@ pipeline {
 
     options {
         timestamps()
+        disableConcurrentBuilds()
     }
 
     stages {
@@ -49,14 +50,32 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy to EC2') {
+            steps {
+                echo 'Deploying Employee Management API to EC2...'
+
+                sh 'sudo -n /usr/local/sbin/deploy-employee-management'
+            }
+        }
+
+        stage('Verify HTTPS') {
+            steps {
+                sh '''
+                    curl --fail --silent --show-error \
+                        https://employee.kakuri.online/health
+                '''
+            }
+        }
     }
 
     post {
         success {
-            echo 'CI pipeline completed successfully!'
+            echo 'CI/CD pipeline completed successfully!'
         }
+
         failure {
-            echo 'CI pipeline failed. Check the console output.'
+            echo 'CI/CD pipeline failed. Check console output.'
         }
     }
 }
